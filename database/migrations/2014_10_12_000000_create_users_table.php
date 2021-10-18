@@ -14,7 +14,6 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->
             $table->id();
             $table->string('username');
             $table->string('name');
@@ -25,6 +24,16 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
+
+        DB::table('users')->insert(
+            array(
+                'username' => 'admin',
+                'name' => 'Admin',
+                'email' => 'admin@127.0.0.1',
+                'password' => '$2a$12$8pIjfurF/iGeWxm5BbaHJuJW7Y4qeQUsIecKF3adBkUVdjCuLCFbC',
+                'is_admin' => 1,
+            )
+        );
     }
 
     /**
