@@ -17,7 +17,6 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('username');
             $table->string('name');
-            $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->integer('is_admin');
@@ -29,7 +28,6 @@ class CreateUsersTable extends Migration
             array(
                 'username' => 'admin',
                 'name' => 'Admin',
-                'email' => 'admin@127.0.0.1',
                 'password' => '$2a$12$8pIjfurF/iGeWxm5BbaHJuJW7Y4qeQUsIecKF3adBkUVdjCuLCFbC',
                 'is_admin' => 1,
             )

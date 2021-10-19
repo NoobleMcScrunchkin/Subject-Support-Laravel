@@ -48,7 +48,9 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <!-- Authentication -->
+                        <x-dropdown-link :href="route('changePassword')">
+                            {{ __('Change Password') }}
+                        </x-dropdown-link>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
 
@@ -80,17 +82,25 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('students')" :active="request()->routeIs('students')">
+                {{ __('Students') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('teachers')" :active="request()->routeIs('teachers')">
+                {{ __('Teachers') }}
+            </x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">
                 <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
             </div>
 
             <div class="mt-3 space-y-1">
                 <!-- Authentication -->
+                <x-responsive-nav-link :href="route('changePassword')">
+                    {{ __('Change Password') }}
+                </x-responsive-nav-link>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
 

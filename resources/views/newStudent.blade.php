@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-form-card>
-        @if (isset($student))
+        @if ($edit)
         <form method="POST" action="{{ route('editStudent', ['id' => $student['id']]) }}">
         @else
         <form method="POST" action="{{ route('newStudent') }}">
@@ -11,7 +11,7 @@
                 <x-label for="firstname" :value="__('Firstname')" />
 
                 <input id="firstname" 
-                    value = "{{ isset($student) ? $student['firstname'] : "" }}"
+                    value = "{{ $edit ? $student['firstname'] : "" }}"
                     class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                     type="text"
                     name="firstname"
@@ -22,7 +22,7 @@
                 <x-label for="surname" :value="__('Surname')" />
 
                 <input id="surname" 
-                    value = "{{ isset($student) ? $student['surname'] : "" }}"
+                    value = "{{ $edit ? $student['surname'] : "" }}"
                     class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                     type="text"
                     name="surname"
