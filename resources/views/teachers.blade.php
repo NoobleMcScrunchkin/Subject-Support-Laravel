@@ -13,10 +13,19 @@
                         </thead>
                         <tbody>
                             @foreach ($teachers as $teacher)
+                                @if ($teacher->id == 1)
+                                    @continue
+                                @endif
                                 <tr>
                                     <td>{{ $teacher['surname'] }}</td>
                                     <td class="w-100">{{ $teacher['firstname'] }}</td>
                                     <td class="d-flex">
+                                        <form method="GET" action="{{ __('/setTeacherStudents/'.$teacher['id']) }}">
+                                            @csrf
+                                            <x-button class="me-1">
+                                                {{ __('Students') }}
+                                            </x-button>
+                                        </form>
                                         <form method="GET" action="{{ __('/editTeacher/'.$teacher['id']) }}">
                                             @csrf
                                             <x-button class="me-1">
@@ -32,6 +41,11 @@
                                     </td>
                                 </tr>
                             @endforeach
+                            @if (sizeof($teachers) == 1)
+                                <tr>
+                                    <td colspan=4>No Teachers</td>
+                                </tr>
+                            @endif
                         </tbody>
                     </table>
                     <x-a href="/newTeacher">New Teacher</x-a>

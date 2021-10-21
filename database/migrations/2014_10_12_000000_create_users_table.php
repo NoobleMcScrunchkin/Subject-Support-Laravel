@@ -16,7 +16,8 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('username');
-            $table->string('name');
+            $table->string('firstname');
+            $table->string('surname');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->integer('is_admin');
@@ -27,7 +28,8 @@ class CreateUsersTable extends Migration
         DB::table('users')->insert(
             array(
                 'username' => 'admin',
-                'name' => 'Admin',
+                'firstname' => 'Admin',
+                'surname' => '',
                 'password' => '$2a$12$8pIjfurF/iGeWxm5BbaHJuJW7Y4qeQUsIecKF3adBkUVdjCuLCFbC',
                 'is_admin' => 1,
             )

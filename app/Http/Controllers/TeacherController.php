@@ -4,22 +4,21 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
 use App\Http\Controllers\Controller;
-use App\Models\Teachers;
 use App\Models\User;
+use App\Models\Students;
+use App\Models\students_user;
 
 class TeacherController extends Controller {
     public function newTeacher(Request $request) {
         if (!Auth::user()->can('canCreateTeachers')) {
             return redirect('/');
         }
-        $teacher = new Teachers;
-        $teacher->firstname = $request['firstname'];
-        $teacher->surname = $request['surname'];
-        $teacher->save();
         $user = new User;
-        $user->name = $request['firstname']." ".$request['surname'];
+        $user->firstname = $request['firstname'];
+        $user->surname = $request['surname'];
         $user->username = strtolower($request['firstname']).".".strtolower($request['surname']);
         $user->password = '$2a$12$2hJtQK2AksZxw3yKeIy10ewwajzfiYpvFw5DGk2Sjppo/Gzi5jOFC';
+        $user->is_admin = 0;
         $user->save();
         $user->assignRole('Teacher');
         return redirect('/teachers');
@@ -29,16 +28,11 @@ class TeacherController extends Controller {
         if (!Auth::user()->can('canCreateTeachers')) {
             return redirect('/');
         }
-        $teacher = Teachers::find($id);
+        $teacher = User::find($id);
         if ($teacher) {
             $teacher->firstname = $request['firstname'];
             $teacher->surname = $request['surname'];
             $teacher->save();
-            $user = User::find($teacher['id']);
-            if ($user) {
-                $user->name = $request['firstname']." ".$request['surname'];
-                $user->save();
-            }
         }
         return redirect('/teachers');
     }
@@ -47,7 +41,7 @@ class TeacherController extends Controller {
         if (!Auth::user()->can('canCreateTeachers')) {
             return redirect('/');
         }
-        $teacher = Teachers::find($id);
+        $teacher = User::find($id);
         if ($teacher) {
             $teacher->delete();
         }
@@ -58,13 +52,10 @@ class TeacherController extends Controller {
         if (!Auth::user()->can('canCreateTeachers')) {
             return redirect('/');
         }
-        $teacher = Teachers::find($id);
+        $teacher = User::find($id);
         if ($teacher) {
-            $user = User::find($teacher['userID']);
-            if ($user) {
-                $user->password = '$2a$12$2hJtQK2AksZxw3yKeIy10ewwajzfiYpvFw5DGk2Sjppo/Gzi5jOFC';
-                $user->save();
-            }
+            $teacher->password = '$2a$12$2hJtQK2AksZxw3yKeIy10ewwajzfiYpvFw5DGk2Sjppo/Gzi5jOFC';
+            $teacher->save();
         }
         return redirect('/teachers');
     }
@@ -82,5 +73,28 @@ class TeacherController extends Controller {
         $user->password = password_hash($request['newPassword'], PASSWORD_BCRYPT);
         $user->save();
         return redirect('/');
+    }
+
+    public function setTeacherStudents(Request $request, $id) {
+        if (!Auth::user()->can('canCreateTeachers')) {
+            return redirect('/teachers');
+        }
+        $students = array_unique($request->students);
+        if (!User::find($id)) {
+            return redirect('/teachers');
+        }
+        
+        students_user::where('user_id', $id)->delete();
+
+        foreach ($students as $student) {
+            if (!Students::find($student)) {
+                continue;
+            }
+            $rel = students_user::firstOrCreate([
+                'students_id' => $student,
+                'user_id' => $id
+            ]);
+        }
+        return redirect('/teachers');
     }
 }

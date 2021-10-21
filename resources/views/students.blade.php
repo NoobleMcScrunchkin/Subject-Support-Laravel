@@ -16,25 +16,34 @@
                                 <tr>
                                     <td>{{ $student['surname'] }}</td>
                                     <td class="w-100">{{ $student['firstname'] }}</td>
-                                    <td class="d-flex">
-                                        <form method="GET" action="{{ __('/editStudent/'.$student['id']) }}">
-                                            @csrf
-                                            <x-button class="me-1">
-                                                {{ __('Edit') }}
-                                            </x-button>
-                                        </form>
-                                        <form method="GET" action="{{ __('/deleteStudent/'.$student['id']) }}">
-                                            @csrf
-                                            <x-button class="me-3">
-                                                {{ __('Delete') }}
-                                            </x-button>
-                                        </form>
-                                    </td>
+                                    @if(Auth::user()->can('canCreateStudents'))
+                                        <td class="d-flex">
+                                            <form method="GET" action="{{ __('/editStudent/'.$student['id']) }}">
+                                                @csrf
+                                                <x-button class="me-1">
+                                                    {{ __('Edit') }}
+                                                </x-button>
+                                            </form>
+                                            <form method="GET" action="{{ __('/deleteStudent/'.$student['id']) }}">
+                                                @csrf
+                                                <x-button class="me-3">
+                                                    {{ __('Delete') }}
+                                                </x-button>
+                                            </form>
+                                        </td>
+                                    @endif
                                 </tr>
                             @endforeach
+                            @if (sizeof($students) == 0)
+                                <tr>
+                                    <td colspan=4>No Students</td>
+                                </tr>
+                            @endif
                         </tbody>
                     </table>
-                    <x-a href="/newStudent">New Student</x-a>
+                    @if(Auth::user()->can('canCreateStudents'))
+                        <x-a href="/newStudent">New Student</x-a>
+                    @endif  
                 </div>
             </div>
         </div>

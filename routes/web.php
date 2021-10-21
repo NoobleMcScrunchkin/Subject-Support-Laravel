@@ -5,6 +5,8 @@ use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\StudentController;
 use App\Models\Students;
 use App\Models\Teachers;
+use App\Models\Attendance;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,8 +20,29 @@ use App\Models\Teachers;
 */
 
 Route::get('/', function () {
-    return view('dashboard');
+    $day = date('w');
+    $week_start = date('d-m-Y', strtotime('-'.$day.' days'));
+    return view('dashboard', [ 'students' => Students::all(), 'attendance' => Attendance::all()->where('week_commencing', $week_start) ]);
 })->middleware(['auth'])->name('dashboard');
+
+Route::get('/showIncomplete', function () {
+    $day = date('w');
+    $week_start = date('d-m-Y', strtotime('-'.$day.' days'));
+    return view('dashboard', [ 'students' => Students::all(), 'attendance' => Attendance::all()->where('week_commencing', $week_start) ]);
+})->middleware(['auth'])->name('incomplete');
+
+Route::get('/setTeacherStudents/{id}', function ($id) {
+    if (!Auth::user()->can('canCreateTeachers')) {
+        return redirect('/teachers');
+    }
+    $teacher = User::find($id);
+    if (!$teacher) {
+        return redirect('/teachers');
+    }
+    return view('setTeacherStudents', [ 'students' => Students::all(), 'teacher' => $teacher ]);
+})->middleware(['auth'])->name('test');
+
+Route::post('/setTeacherStudents/{id}', [TeacherController::class, 'setTeacherStudents'])->name('setTeacherStudents');
 
 Route::get('/changePassword', function () {
     return view('changePassword');
@@ -33,7 +56,7 @@ Route::get('/teachers', function () {
     if (!Auth::user()->can('canViewTeachers')) {
         return redirect('/');
     }
-    return view('teachers', [ 'teachers' => Teachers::all() ]);
+    return view('teachers', [ 'teachers' => User::all() ]);
 })->middleware(['auth'])->name('teachers');
 
 Route::get('/newTeacher', function () {
@@ -47,7 +70,7 @@ Route::get('/editTeacher/{id}', function ($id) {
     if (!Auth::user()->can('canCreateTeachers')) {
         return redirect('/');
     }
-    $teacher = Teachers::find($id);
+    $teacher = User::find($id);
     if (!$teacher) {
         return redirect('/teachers');
     }
@@ -88,6 +111,7 @@ Route::get('/editStudent/{id}', function ($id) {
 
 Route::post('/newStudent', [StudentController::class, 'newStudent']);
 Route::post('/editStudent/{id}', [StudentController::class, 'editStudent']);
+Route::post('/setAttendance/{id}', [StudentController::class, 'setAttendance']);
 Route::get('/deleteStudent/{id}', [StudentController::class, 'deleteStudent']);
 
 require __DIR__.'/auth.php';

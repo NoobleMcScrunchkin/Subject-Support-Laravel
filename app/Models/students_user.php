@@ -5,9 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Teachers extends Model
+class students_user extends Model
 {
     use HasFactory;
+    protected $table = 'students_user';
 
     /**
      * The attributes that are mass assignable.
@@ -15,7 +16,7 @@ class Teachers extends Model
      * @var string[]
      */
     protected $fillable = [
-        'firstname',
-        'surname',
+       'students_id',
+       'user_id',
     ];
 }

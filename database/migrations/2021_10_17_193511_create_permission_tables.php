@@ -29,6 +29,48 @@ class CreatePermissionTables extends Migration
             $table->unique(['name', 'guard_name']);
         });
 
+        DB::table('permissions')->insert(
+            array(
+                'name' => 'canCreateStudents',
+                'guard_name' => 'web',
+            )
+        );
+
+        DB::table('permissions')->insert(
+            array(
+                'name' => 'canCreateTeachers',
+                'guard_name' => 'web',
+            )
+        );
+
+        DB::table('permissions')->insert(
+            array(
+                'name' => 'canTakeAttendance',
+                'guard_name' => 'web',
+            )
+        );
+
+        DB::table('permissions')->insert(
+            array(
+                'name' => 'canViewAttendance',
+                'guard_name' => 'web',
+            )
+        );
+
+        DB::table('permissions')->insert(
+            array(
+                'name' => 'canViewStudents',
+                'guard_name' => 'web',
+            )
+        );
+
+        DB::table('permissions')->insert(
+            array(
+                'name' => 'canViewTeachers',
+                'guard_name' => 'web',
+            )
+        );
+
         Schema::create($tableNames['roles'], function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');       // For MySQL 8.0 use string('name', 125);
@@ -37,6 +79,20 @@ class CreatePermissionTables extends Migration
 
             $table->unique(['name', 'guard_name']);
         });
+
+        DB::table('roles')->insert(
+            array(
+                'name' => 'Teacher',
+                'guard_name' => 'web',
+            )
+        );
+
+        DB::table('roles')->insert(
+            array(
+                'name' => 'Subject Support Head',
+                'guard_name' => 'web',
+            )
+        );
 
         Schema::create($tableNames['model_has_permissions'], function (Blueprint $table) use ($tableNames, $columnNames) {
             $table->unsignedBigInteger('permission_id');
@@ -70,6 +126,22 @@ class CreatePermissionTables extends Migration
                     'model_has_roles_role_model_type_primary');
         });
 
+        DB::table('model_has_roles')->insert(
+            array(
+                'model_type' => 'App\Models\User',
+                'model_id' => 1,
+                'role_id' => 1,
+            )
+        );
+
+        DB::table('model_has_roles')->insert(
+            array(
+                'model_type' => 'App\Models\User',
+                'model_id' => 1,
+                'role_id' => 2,
+            )
+        );
+
         Schema::create($tableNames['role_has_permissions'], function (Blueprint $table) use ($tableNames) {
             $table->unsignedBigInteger('permission_id');
             $table->unsignedBigInteger('role_id');
@@ -86,6 +158,62 @@ class CreatePermissionTables extends Migration
 
             $table->primary(['permission_id', 'role_id'], 'role_has_permissions_permission_id_role_id_primary');
         });
+
+        DB::table('role_has_permissions')->insert(
+            array(
+                'permission_id' => 2,
+                'role_id' => 2,
+            )
+        );
+
+        DB::table('role_has_permissions')->insert(
+            array(
+                'permission_id' => 3,
+                'role_id' => 2,
+            )
+        );
+
+        DB::table('role_has_permissions')->insert(
+            array(
+                'permission_id' => 4,
+                'role_id' => 2,
+            )
+        );
+
+        DB::table('role_has_permissions')->insert(
+            array(
+                'permission_id' => 5,
+                'role_id' => 2,
+            )
+        );
+
+        DB::table('role_has_permissions')->insert(
+            array(
+                'permission_id' => 6,
+                'role_id' => 2,
+            )
+        );
+
+        DB::table('role_has_permissions')->insert(
+            array(
+                'permission_id' => 3,
+                'role_id' => 1,
+            )
+        );
+
+        DB::table('role_has_permissions')->insert(
+            array(
+                'permission_id' => 5,
+                'role_id' => 1,
+            )
+        );
+
+        DB::table('role_has_permissions')->insert(
+            array(
+                'permission_id' => 1,
+                'role_id' => 2,
+            )
+        );
 
         app('cache')
             ->store(config('permission.cache.store') != 'default' ? config('permission.cache.store') : null)

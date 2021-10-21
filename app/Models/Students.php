@@ -18,4 +18,8 @@ class Students extends Model
         'firstname',
         'surname',
     ];
+
+    public function users() {
+        return $this->belongsToMany(User::class);
+    }
 }
