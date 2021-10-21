@@ -22,3 +22,6 @@ Previous Subject Support system rebuilt using Laravel PHP framework.
 - Teachers can only see the attendance for students they're assigned to
 - Users are able to set completion of each period of support undertaken by a Student
 - Users are able to see which students they are assigned have incomplete attendance records
+
+# Screenshots
+![dashboard](./images/dashboard.png)
